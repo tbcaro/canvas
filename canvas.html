@@ -1,27 +1,111 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!--
+      Author: Travis Caro
+      Description:
+
+      This application is an interactive drawing tool using the HTML5 canvas element.
+      This app will allow the user to:
+        - Generate random boxes on the canvas
+        - Generate random circles on the canvas
+        - Freedraw with the mouse on the canvas
+        - Draw Etch-a-Sketch style with the keys on the canvas
+        - Generate a configurable spiral
+          - Spiral has configurable number of rotations
+          - Spiral has configurable number of steps in 2-PI, thus a more circular spiral as steps increase
+        - Generate sin and cos waves
+        - Clear the canvas
+    -->
+
     <meta charset="utf-8">
-    <title>CIS377-Canvas</title>
+    <title>CIS377-TravisCaro-Canvas</title>
 
     <link rel="stylesheet" href="./canvas.css">
     <script src="./canvas.js" charset="utf-8"></script>
   </head>
   <body>
-    <header id="header">
-      <h3 class="text-center">Canvas and JavaScript</h3>
-      <p class="text-center">Mouse Draw: hold down left mouse key & move. - Etch-a-Sketch: use wasd buttons (u,l,d,r)</p>
-    </header>
-    <section id="content">
+    <section class="container">
+      <section class="grid">
+        <header id="header" class="col-12">
+          <h3 class="text-center">Canvas and JavaScript</h3>
+          <p class="text-center">Mouse Draw: hold down left mouse key & move. - Etch-a-Sketch: use wasd buttons (u,l,d,r)</p>
+        </header>
+        <section id="content" class="col-12">
 
-      <section id="canvas-container" class="pull-left">
-        <canvas id="canvas" width="800" height="400"></canvas>
+          <section id="canvas-container" class="col-10">
+            <canvas id="canvas" width="800" height="400"></canvas>
+          </section>
+
+          <section id="controls-container" class="col-2 text-center">
+            <section class="grid">
+              <section class="col-12">
+                <button type="button" id="btn-boxes" class="button">Boxes</button>
+                <button type="button" id="btn-circles" class="button">Circles</button>
+              </section>
+            </section>
+
+            <section class="grid">
+              <section class="col-6 text-right">
+                <label class="label">Repeat:</label>
+              </section>
+              <section class="col-6 text-left">
+                <input type="text" id="textbox-repeat" class="textbox"/>
+              </section>
+            </section>
+
+            <section class="grid">
+              <section class="col-6 text-right">
+                <label class="label">Line Width:</label>
+              </section>
+              <section class="col-6 text-left">
+                <input type="text" id="textbox-linewidth" class="textbox"/>
+              </section>
+            </section>
+
+            <hr>
+
+            <section class="grid">
+              <section class="col-12">
+                <button type="button" id="btn-spiral" class="button">Spiral</button>
+              </section>
+            </section>
+
+            <section class="grid">
+              <section class="col-6 text-right">
+                <label class="label">Rotations:</label>
+              </section>
+              <section class="col-6 text-left">
+                <input type="text" id="textbox-rotations" class="textbox"/>
+              </section>
+            </section>
+
+            <section class="grid">
+              <section class="col-6 text-right">
+                <label class="label">Steps in 2&pi;:</label>
+              </section>
+              <section class="col-6 text-left">
+                <input type="text" id="textbox-steps" class="textbox"/>
+              </section>
+            </section>
+
+            <hr>
+
+            <section class="grid">
+              <section class="col-12">
+                <button type="button" id="btn-sincos-wave" class="button">Sin Cos Wave</button>
+              </section>
+            </section>
+
+            <hr>
+
+            <section class="grid">
+              <section class="col-12">
+                <button type="button" id="btn-clear" class="button">Clear</button>
+              </section>
+            </section>
+        </section>
       </section>
-      <section id="controls-container" class="pull-left">
-
-      </section>
-      <section class="clearfix"></section>
-
     </section>
   </body>
 </html>
