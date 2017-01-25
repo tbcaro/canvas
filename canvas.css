@@ -23,8 +23,6 @@
 
 #controls-container {
   background: #4375c6;
-  /*width: 15%;*/
-  /*padding: 2.5%;*/
 }
 
 #canvas {
@@ -49,6 +47,7 @@
 
 .textbox {
   width: 100%;
+  text-align: center;
 }
 
 /* Grid System */
