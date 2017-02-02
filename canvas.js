@@ -1,118 +1,181 @@
 window.onload = function () {
   var app = new App();
-  app.run();
+  app.initialize();
 }
 
 // TBC : Object constructors
 function App() {
-  this.elements = { };
-  this.context;
+  // TBC : Public scope
+  var self = { };
+
+  // TBC : Private variables
+  var elements = { },
+      context,
+      mouseDrawer,
+      etchASketch;
 
   // TBC : Initialize app and bindEventHandlers
-  this.run = function() {
-    this.init();
-    this.bindEventHandlers();
-  }
-
-  // TBC : Initialize elements and variables
-  this.init = function() {
+  self.initialize = function() {
+    console.log('initializing app...');
     // TBC : Get valuable elements
-    this.elements.canvas = document.getElementById('canvas');
-    this.elements.btnBoxes = document.getElementById('btn-boxes');
-    this.elements.btnCircles = document.getElementById('btn-circles');
-    this.elements.btnSpiral = document.getElementById('btn-spiral');
-    this.elements.btnSinCosWave = document.getElementById('btn-sincos-wave');
-    this.elements.btnClear = document.getElementById('btn-clear');
-    this.elements.textBoxRepeat = document.getElementById('textbox-repeat');
-    this.elements.textBoxLineWidth = document.getElementById('textbox-linewidth');
-    this.elements.textBoxRotations = document.getElementById('textbox-rotations');
-    this.elements.textBoxSteps = document.getElementById('textbox-steps');
+    elements.canvas            = document.getElementById('canvas');
+    elements.btnBoxes          = document.getElementById('btn-boxes');
+    elements.btnCircles        = document.getElementById('btn-circles');
+    elements.btnSpiral         = document.getElementById('btn-spiral');
+    elements.btnSinCosWave     = document.getElementById('btn-sincos-wave');
+    elements.btnClear          = document.getElementById('btn-clear');
+    elements.textBoxRepeat     = document.getElementById('textbox-repeat');
+    elements.textBoxLineWidth  = document.getElementById('textbox-linewidth');
+    elements.textBoxRotations  = document.getElementById('textbox-rotations');
+    elements.textBoxSteps      = document.getElementById('textbox-steps');
 
     // TBC : Get canvas context
-    this.context = elements.canvas.getContext('2d');
+    context = elements.canvas.getContext('2d');
+
+    // TBC : Instantiate delegated modules
+    mouseDrawer = new MouseDrawer(elements.canvas, context);
+    etchASketch = new EtchASketch(elements.canvas, context);
+
+    // TBC : Bind event handlers
+    bindEventHandlers();
+    mouseDrawer.bindEventHandlers();
+    etchASketch.bindEventHandlers();
+    console.log('initializing app complete');
   }
 
   // Bind event handlers to elements
-  this.bindEventHandlers = function() {
-
-    this.elements.btnBoxes.addEventListener('click', function() {
+  var bindEventHandlers = function() {
+    console.log('binding app event handlers...');
+    elements.btnBoxes.addEventListener('click', function() {
       try {
-        this.generateRandomBoxes(this.getRepeat(), this.getLineWidth());
+        generateRandomBoxes(getRepeat(), getLineWidth());
       } catch (ex) {
         alert(ex.message);
       }
     });
 
-    this.elements.btnCircles.addEventListener('click', function() {
+    elements.btnCircles.addEventListener('click', function() {
       try {
-        this.generateRandomCircles(this.getRepeat(), this.getLineWidth())
+        generateRandomCircles(getRepeat(), getLineWidth())
       } catch (ex) {
         alert(ex.message);
       }
     });
 
-    this.elements.btnSpiral.addEventListener('click', function() {
+    elements.btnSpiral.addEventListener('click', function() {
       try {
-        this.generateSpiral(this.getRotations(), this.getSteps());
+        generateSpiral(getRotations(), getSteps());
       } catch (ex) {
         alert(ex.message);
       }
     });
 
-    this.elements.btnSinCosWave.addEventListener('click', function() {
+    elements.btnSinCosWave.addEventListener('click', function() {
       try {
-        this.generateSinCosWave();
+        generateSinCosWave();
       } catch (ex) {
         alert(ex.message);
       }
     });
 
-    this.elements.btnClear.addEventListener('click', function() {
+    elements.btnClear.addEventListener('click', function() {
       try {
-        this.clearCanvas();
+        clearCanvas();
       } catch (ex) {
         alert(ex.message);
       }
     });
-
-    // TODO : Add handler for mouse draw
-
-    // TODO : Add handler for etch-a-sketch keys
+    console.log('binding app event handlers complete');
   }
 
-  this.generateRandomBoxes = function(repeat, lineWidth) {
-    // TODO
+  var generateRandomBoxes = function(repeat, lineWidth) {
+    console.log('generating random boxes...');
+    console.log('repeat: ' + repeat);
+    console.log('lineWidth: ' + lineWidth);
+
+    console.log('generating random boxes complete');
   }
 
-  this.generateRandomCircles = function(repeat, lineWidth) {
-    // TODO
+  var generateRandomCircles = function(repeat, lineWidth) {
+    console.log('generating random circles...');
+    console.log('repeat: ' + repeat);
+    console.log('lineWidth: ' + lineWidth);
+
+    console.log('generating random circles complete');
   }
 
-  this.generateSpiral = function(rotations, steps) {
-    // TODO
+  var generateSpiral = function(rotations, steps) {
+    console.log('generating spiral...');
+    console.log('rotations: ' + rotations);
+    console.log('steps: ' + steps);
+
+    console.log('generating spiral complete');
   }
 
-  this.generateSinCosWave = function() {
-    // TODO
+  var generateSinCosWave = function() {
+    console.log('generating sin-cos wave...');
+
+    console.log('generating sin-cos wave complete');
   }
 
-  this.clearCanvas = function() {
-    // TODO
+  var clearCanvas = function() {
+    console.log('clearing canvas...');
+
+    console.log('clearing canvas complete');
   }
 
-  this.getRepeat() {
-    // TODO : Return repeat
+  var getRepeat = function() {
+    return elements.textBoxRepeat.value;
   }
 
-  this.getLineWidth() {
-    // TODO : Return lineWidth
+  var getLineWidth = function() {
+    return elements.textBoxLineWidth.value;
   }
 
-  this.getRotations() {
-    // TODO : Return rotations
+  var getRotations = function() {
+    return elements.textBoxRotations.value;
   }
 
-  this.getSteps() {
-    // TODO : Return steps
+  var getSteps = function() {
+    return elements.textBoxSteps.value;
   }
+
+  return self;
+}
+
+function MouseDrawer(canvas, context) {
+  var self = { };
+  self.canvas = canvas;
+  self.context = context;
+  self.x = 0;
+  self.y = 0;
+  self.isDrawing = false;
+
+  self.bindEventHandlers = function() {
+    console.log('binding mouse drawer event handlers...');
+
+    console.log('binding mouse drawer event handlers complete');
+  }
+
+  self.fromWindowCoords = function(coords) {
+
+  }
+
+  return self;
+}
+
+function EtchASketch(canvas, context) {
+  var self = { };
+  self.canvas = canvas;
+  self.context = context;
+  self.x = canvas.width / 2;
+  self.y = canvas.width / 2;
+
+  self.bindEventHandlers = function() {
+    console.log('binding etch-a-sketch event handlers...');
+
+    console.log('binding etch-a-sketch event handlers complete');
+  }
+
+  return self;
 }
