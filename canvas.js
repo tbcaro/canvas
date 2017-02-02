@@ -120,7 +120,7 @@ function App() {
 
   var clearCanvas = function() {
     console.log('clearing canvas...');
-
+    context
     console.log('clearing canvas complete');
   }
 
@@ -145,46 +145,47 @@ function App() {
 
 function MouseDrawer(canvas, context) {
   var self = { };
-  self.canvas = canvas;
-  self.context = context;
-  self.coords = { x: 0, y: 0 }
-  self.isDrawing = false;
+
+  var canvas = canvas,
+      context = context,
+      coords = { x: 0, y: 0 },
+      isDrawing = false;
 
   self.bindEventHandlers = function() {
     console.log('binding mouse drawer event handlers...');
 
-    self.canvas.addEventListener('mousedown', function(event) {
-      self.coords = self.toCanvasPos(event.clientX, event.clientY);
+    canvas.addEventListener('mousedown', function(event) {
+      coords = toCanvasPos(event.clientX, event.clientY);
 
-      self.isDrawing = true;
-      self.canvas.style.cursor = 'crosshair';
-      self.context.moveTo(self.coords.x, self.coords.y);
-      self.draw();
+      isDrawing = true;
+      canvas.style.cursor = 'crosshair';
+      context.moveTo(coords.x, coords.y);
+      draw();
     });
 
-    self.canvas.addEventListener('mousemove', function(event) {
-      if (self.isDrawing) {
-        self.coords = self.toCanvasPos(event.clientX, event.clientY);
+    canvas.addEventListener('mousemove', function(event) {
+      if (isDrawing) {
+        coords = toCanvasPos(event.clientX, event.clientY);
 
-        self.draw();
+        draw();
       }
     });
 
-    self.canvas.addEventListener('mouseup', function(event) {
-      self.isDrawing = false;
-      self.canvas.style.cursor = 'default';
+    canvas.addEventListener('mouseup', function(event) {
+      isDrawing = false;
+      canvas.style.cursor = 'default';
     });
 
     console.log('binding mouse drawer event handlers complete');
   }
 
-  self.draw = function() {
-    self.context.lineTo(self.coords.x, self.coords.y);
-    self.context.stroke();
+  var draw = function() {
+    context.lineTo(coords.x, coords.y);
+    context.stroke();
   }
 
-  self.toCanvasPos = function(x, y) {
-    var box = self.canvas.getBoundingClientRect();
+  var toCanvasPos = function(x, y) {
+    var box = canvas.getBoundingClientRect();
 
     return {
       x: x - box.left,
@@ -196,40 +197,42 @@ function MouseDrawer(canvas, context) {
 }
 
 function EtchASketch(canvas, context) {
+  var DRAW_SIZE = 5;
+
   var self = { };
-  self.DRAW_SIZE = 5;
-  self.canvas = canvas;
-  self.context = context;
-  self.x = canvas.width / 2;
-  self.y = canvas.height / 2;
-  self.controls = {
-    up: 'w',
-    left: 'a',
-    down: 's',
-    right: 'd'
-  }
+
+  var canvas = canvas,
+      context = context,
+      x = canvas.width / 2,
+      y = canvas.height / 2,
+      controls = {
+        up: 'w',
+        left: 'a',
+        down: 's',
+        right: 'd'
+      };
 
   self.bindEventHandlers = function() {
     console.log('binding etch-a-sketch event handlers...');
 
     window.addEventListener('keydown', function(event){
-      if (Object.values(self.controls).includes(event.key)) {
+      if (Object.values(controls).includes(event.key)) {
         switch (event.key) {
-          case self.controls.up:
-            self.y -= self.DRAW_SIZE;
-            self.draw();
+          case controls.up:
+            y -= DRAW_SIZE;
+            draw();
             break;
-          case self.controls.left:
-            self.x -= self.DRAW_SIZE;
-            self.draw();
+          case controls.left:
+            x -= DRAW_SIZE;
+            draw();
             break;
-          case self.controls.down:
-            self.y += self.DRAW_SIZE;
-            self.draw();
+          case controls.down:
+            y += DRAW_SIZE;
+            draw();
             break;
-          case self.controls.right:
-            self.x += self.DRAW_SIZE;
-            self.draw();
+          case controls.right:
+            x += DRAW_SIZE;
+            draw();
             break;
         }
       }
@@ -238,9 +241,9 @@ function EtchASketch(canvas, context) {
     console.log('binding etch-a-sketch event handlers complete');
   }
 
-  self.draw = function() {
-    self.context.fillStyle = '#000';
-    self.context.fillRect(self.x, self.y, self.DRAW_SIZE, self.DRAW_SIZE);
+  var draw = function() {
+    context.fillStyle = '#000';
+    context.fillRect(x, y, DRAW_SIZE, DRAW_SIZE);
   }
 
   return self;
