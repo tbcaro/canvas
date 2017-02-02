@@ -120,7 +120,8 @@ function App() {
 
   var clearCanvas = function() {
     console.log('clearing canvas...');
-    context
+    context.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+    context.beginPath();
     console.log('clearing canvas complete');
   }
 
