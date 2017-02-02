@@ -147,18 +147,53 @@ function MouseDrawer(canvas, context) {
   var self = { };
   self.canvas = canvas;
   self.context = context;
-  self.x = 0;
-  self.y = 0;
+  self.coords = { x: 0, y: 0 }
   self.isDrawing = false;
 
   self.bindEventHandlers = function() {
     console.log('binding mouse drawer event handlers...');
 
+    self.canvas.addEventListener('mousedown', function(event) {
+      var fromCoords = self.toCanvasPos(event.clientX, event.clientY);
+
+      self.isDrawing = true;
+      self.canvas.style.cursor = 'crosshair';
+      self.draw(fromCoords, fromCoords);
+
+      self.coords = fromCoords;
+    });
+
+    self.canvas.addEventListener('mousemove', function(event) {
+      if (self.isDrawing) {
+        var fromCoords = self.toCanvasPos(event.clientX, event.clientY);
+
+        self.draw(fromCoords, self.coords);
+
+        self.coords = fromCoords;
+      }
+    });
+
+    self.canvas.addEventListener('mouseup', function(event) {
+      self.isDrawing = false;
+      self.canvas.style.cursor = 'default';
+    });
+
     console.log('binding mouse drawer event handlers complete');
   }
 
-  self.fromWindowCoords = function(coords) {
+  self.draw = function(fromCoords, toCoords) {
+    self.context.moveTo(fromCoords.x, fromCoords.y);
+    self.context.lineTo(toCoords.x, toCoords.y)
+    self.context.stroke();
+  }
 
+  self.toCanvasPos = function(x, y) {
+    var box = self.canvas.getBoundingClientRect();
+
+    return {
+      x: x - box.left,
+      y: y - box.top
+    };
   }
 
   return self;
