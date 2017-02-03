@@ -131,17 +131,17 @@ function App() {
       var colors      = getRandomColors(),
           size        = getRandomSize(),
           location    = getRandomLocation(),
-          start_angle = 0,
-          end_angle   = 2 * Math.PI;
+          START_ANGLE = 0,
+          END_ANGLE   = 2 * Math.PI;
 
       context.beginPath();
       context.fillStyle = 'rgba('+ colors.r + ',' + colors.g + ',' + colors.b + ',' + colors.a + ')';
       context.arc(
         location.x + (size.radius / 2),
-        location.y + (size.radius / 2), 
+        location.y + (size.radius / 2),
         size.radius,
-        start_angle,
-        end_angle
+        START_ANGLE,
+        END_ANGLE
       );
       context.stroke();
       context.fill();
@@ -154,6 +154,35 @@ function App() {
     console.log('generating spiral...');
     console.log('rotations: ' + rotations);
     console.log('steps: ' + steps);
+
+    var OFFSET      = 10,
+        LINE_WIDTH  = 2,
+        radius      = 5,
+        angle       = 0,
+        center      = { x: canvas.width / 2, y: canvas.height / 2 },
+        colors      = getRandomColors();
+
+    context.lineWidth = LINE_WIDTH;
+    context.strokeStyle = 'rgba('+ colors.r + ',' + colors.g + ',' + colors.b + ',' + 1 + ')';
+    context.moveTo(center.x, center.y);
+    context.beginPath();
+    
+    for (var i = 0; i < rotations; i++) {
+      angle = 0;
+
+      while (angle < 2 * Math.PI) {
+        var newPoint = {
+          x: center.x + (Math.cos(angle) * radius),
+          y: center.y + (Math.sin(angle) * radius)
+        }
+
+        context.lineTo(newPoint.x, newPoint.y);
+        context.stroke();
+
+        radius  += OFFSET / steps;
+        angle   += (2 * Math.PI) / steps;
+      }
+    }
 
     console.log('generating spiral complete');
   }
@@ -237,7 +266,6 @@ function MouseDrawer(canvas, context) {
     canvas.addEventListener('mousemove', function(event) {
       if (isDrawing) {
         coords = toCanvasPos(event.clientX, event.clientY);
-
         draw();
       }
     });
