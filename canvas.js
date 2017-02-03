@@ -122,6 +122,31 @@ function App() {
     console.log('repeat: ' + repeat);
     console.log('lineWidth: ' + lineWidth);
 
+    context.lineWidth = lineWidth;
+    context.strokeStyle = 'black';
+
+    // TBC : Generate random circles based on repeat
+    for (var i = 0; i < repeat; i++) {
+
+      var colors      = getRandomColors(),
+          size        = getRandomSize(),
+          location    = getRandomLocation(),
+          start_angle = 0,
+          end_angle   = 2 * Math.PI;
+
+      context.beginPath();
+      context.fillStyle = 'rgba('+ colors.r + ',' + colors.g + ',' + colors.b + ',' + colors.a + ')';
+      context.arc(
+        location.x + (size.radius / 2),
+        location.y + (size.radius / 2), 
+        size.radius,
+        start_angle,
+        end_angle
+      );
+      context.stroke();
+      context.fill();
+    }
+
     console.log('generating random circles complete');
   }
 
@@ -181,7 +206,8 @@ function App() {
   var getRandomSize = function() {
     return {
       width: Math.floor(Math.random() * MAX_WIDTH),
-      height: Math.floor(Math.random() * MAX_HEIGHT)
+      height: Math.floor(Math.random() * MAX_HEIGHT),
+      radius: Math.floor(Math.random() * (MAX_WIDTH / 2)),
     };
   }
 
