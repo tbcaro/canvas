@@ -5,6 +5,10 @@ window.onload = function () {
 
 // TBC : Object constructors
 function App() {
+  // TBC : Constants
+  var MAX_WIDTH = 300,
+      MAX_HEIGHT = 150;
+
   // TBC : Public scope
   var self = { };
 
@@ -93,6 +97,23 @@ function App() {
     console.log('repeat: ' + repeat);
     console.log('lineWidth: ' + lineWidth);
 
+    context.lineWidth = lineWidth;
+    context.strokeStyle = 'black';
+
+    // TBC : Generate random boxes based on repeat
+    for (var i = 0; i < repeat; i++) {
+
+      var colors    = getRandomColors(),
+          size      = getRandomSize(),
+          location  = getRandomLocation();
+
+      context.beginPath();
+      context.fillStyle = 'rgba('+ colors.r + ',' + colors.g + ',' + colors.b + ',' + colors.a + ')';
+      context.rect(location.x, location.y, size.width, size.height);
+      context.stroke();
+      context.fill();
+    }
+
     console.log('generating random boxes complete');
   }
 
@@ -139,6 +160,29 @@ function App() {
 
   var getSteps = function() {
     return elements.textBoxSteps.value;
+  }
+
+  var getRandomColors = function() {
+    return {
+      r: Math.floor(Math.random() * 256),
+      g: Math.floor(Math.random() * 256),
+      b: Math.floor(Math.random() * 256),
+      a: Math.random()
+    };
+  }
+
+  var getRandomLocation = function() {
+    return {
+      x: Math.floor(Math.random() * (elements.canvas.width - (MAX_WIDTH / 2))),
+      y: Math.floor(Math.random() * (elements.canvas.height - (MAX_HEIGHT / 2)))
+    };
+  }
+
+  var getRandomSize = function() {
+    return {
+      width: Math.floor(Math.random() * MAX_WIDTH),
+      height: Math.floor(Math.random() * MAX_HEIGHT)
+    };
   }
 
   return self;
