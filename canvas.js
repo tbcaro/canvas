@@ -37,8 +37,8 @@ function App() {
     context = elements.canvas.getContext('2d');
 
     // TBC : Instantiate delegated modules
-    mouseDrawer = new MouseDrawer(elements.canvas, context);
-    etchASketch = new EtchASketch(elements.canvas, context);
+    mouseDrawer = new MouseDrawer(elements.canvas, context, self);
+    etchASketch = new EtchASketch(elements.canvas, context, self);
 
     // TBC : Bind event handlers
     bindEventHandlers();
@@ -52,7 +52,7 @@ function App() {
     console.log('binding app event handlers...');
     elements.btnBoxes.addEventListener('click', function() {
       try {
-        generateRandomBoxes(getRepeat(), getLineWidth());
+        generateRandomBoxes(self.getRepeat(), self.getLineWidth());
       } catch (ex) {
         alert(ex.message);
       }
@@ -60,7 +60,7 @@ function App() {
 
     elements.btnCircles.addEventListener('click', function() {
       try {
-        generateRandomCircles(getRepeat(), getLineWidth())
+        generateRandomCircles(self.getRepeat(), self.getLineWidth())
       } catch (ex) {
         alert(ex.message);
       }
@@ -68,7 +68,7 @@ function App() {
 
     elements.btnSpiral.addEventListener('click', function() {
       try {
-        generateSpiral(getRotations(), getSteps());
+        generateSpiral(self.getRotations(), self.getSteps());
       } catch (ex) {
         alert(ex.message);
       }
@@ -166,7 +166,7 @@ function App() {
     context.strokeStyle = 'rgba('+ colors.r + ',' + colors.g + ',' + colors.b + ',' + 1 + ')';
     context.moveTo(center.x, center.y);
     context.beginPath();
-    
+
     for (var i = 0; i < rotations; i++) {
       angle = 0;
 
@@ -200,20 +200,20 @@ function App() {
     console.log('clearing canvas complete');
   }
 
-  var getRepeat = function() {
-    return elements.textBoxRepeat.value;
+  self.getRepeat = function() {
+    return Number.parseInt(elements.textBoxRepeat.value);
   }
 
-  var getLineWidth = function() {
-    return elements.textBoxLineWidth.value;
+  self.getLineWidth = function() {
+    return Number.parseInt(elements.textBoxLineWidth.value);
   }
 
-  var getRotations = function() {
-    return elements.textBoxRotations.value;
+  self.getRotations = function() {
+    return Number.parseInt(elements.textBoxRotations.value);
   }
 
-  var getSteps = function() {
-    return elements.textBoxSteps.value;
+  self.getSteps = function() {
+    return Number.parseInt(elements.textBoxSteps.value);
   }
 
   var getRandomColors = function() {
@@ -243,7 +243,7 @@ function App() {
   return self;
 }
 
-function MouseDrawer(canvas, context) {
+function MouseDrawer(canvas, context, app) {
   var self = { };
 
   var canvas = canvas,
@@ -258,6 +258,7 @@ function MouseDrawer(canvas, context) {
       coords = toCanvasPos(event.clientX, event.clientY);
 
       isDrawing = true;
+      context.beginPath();
       canvas.style.cursor = 'crosshair';
       context.moveTo(coords.x, coords.y);
       draw();
@@ -279,6 +280,7 @@ function MouseDrawer(canvas, context) {
   }
 
   var draw = function() {
+    context.lineWidth = app.getLineWidth();
     context.lineTo(coords.x, coords.y);
     context.stroke();
   }
@@ -295,9 +297,7 @@ function MouseDrawer(canvas, context) {
   return self;
 }
 
-function EtchASketch(canvas, context) {
-  var DRAW_SIZE = 5;
-
+function EtchASketch(canvas, context, app) {
   var self = { };
 
   var canvas = canvas,
@@ -318,19 +318,19 @@ function EtchASketch(canvas, context) {
       if (Object.values(controls).includes(event.key)) {
         switch (event.key) {
           case controls.up:
-            y -= DRAW_SIZE;
+            y < 0 ? y = canvas.height : y -= app.getLineWidth();
             draw();
             break;
           case controls.left:
-            x -= DRAW_SIZE;
+            x < 0 ? x = canvas.width : x -= app.getLineWidth();
             draw();
             break;
           case controls.down:
-            y += DRAW_SIZE;
+            y > canvas.height ? y = 0 : y += app.getLineWidth();
             draw();
             break;
           case controls.right:
-            x += DRAW_SIZE;
+            x > canvas.width ? x = 0 : x += app.getLineWidth();
             draw();
             break;
         }
@@ -341,8 +341,9 @@ function EtchASketch(canvas, context) {
   }
 
   var draw = function() {
+    context.beginPath();
     context.fillStyle = '#000';
-    context.fillRect(x, y, DRAW_SIZE, DRAW_SIZE);
+    context.fillRect(x, y, app.getLineWidth(), app.getLineWidth());
   }
 
   return self;
