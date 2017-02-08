@@ -190,6 +190,29 @@ function App() {
   var generateSinCosWave = function() {
     console.log('generating sin-cos wave...');
 
+    var OFFSET      = 20,
+        BOX_SIZE    = 3,
+        angle       = 0,
+        location    = { x: 0, y: canvas.height / 2 };
+
+    context.moveTo(location.x, location.y);
+    context.beginPath();
+
+    while (location.x < canvas.width) {
+      var sin = Math.sin(angle),
+          cos = Math.cos(angle);
+
+      // TBC : Draw sin wave
+      context.fillStyle = '#ff0000';
+      context.fillRect(location.x, location.y + (sin * OFFSET), BOX_SIZE, BOX_SIZE);
+
+      // TBC : Draw cos wave
+      context.fillStyle = '#00ff00';
+      context.fillRect(location.x, location.y + (cos * OFFSET), BOX_SIZE, BOX_SIZE);
+
+      location.x  += 5;
+      angle       += Math.PI / 12;
+    }
     console.log('generating sin-cos wave complete');
   }
 
