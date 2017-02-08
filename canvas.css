@@ -1,7 +1,7 @@
 /* Elements */
 * {
   font-family: Arial, sans-serif;
-  box-sizing: border-box; !important /* So that border calculation is factored into size */
+  box-sizing: border-box !important; /* So that border calculation is factored into size */
 }
 
 /* IDs */
